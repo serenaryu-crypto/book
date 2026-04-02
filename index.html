@@ -359,11 +359,13 @@ function loadCover(imgId, placeholderId, coverUrl) {
       img.classList.add("loaded");
     };
     img.onerror = function() {
-      if (ph) ph.querySelector(".cover-loader").style.display = "none";
+      // 이미지 로드 실패 → 플레이스홀더 스피너 제거 (무한 스핀 방지)
+      if (ph) ph.style.display = "none";
     };
     img.src = src;
   } else {
-    if (ph) ph.querySelector(".cover-loader").style.display = "none";
+    // cover URL 없음 → 플레이스홀더 전체 숨김 (스피너 무한 방지)
+    if (ph) ph.style.display = "none";
   }
 }
 
@@ -401,35 +403,51 @@ function go(chip) {
       var s = String(str).replace(/```json/gi, "").replace(/```/g, "").trim();
       try {
         var p = JSON.parse(s);
-        return p.books || null;
+        // p.books가 빈 배열[]이어도 null이 아닌 []로 반환 (빈 배열 = 정상 파싱 성공)
+        return Array.isArray(p.books) ? p.books : null;
       } catch(e) { return null; }
+    }
+
+    function escHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function getTextFromNode(node) {
+      // n8n Anthropic 노드: {content: [{type:"text", text:"..."}]}
+      if (node.content && Array.isArray(node.content)) {
+        var block = node.content.filter(function(c){ return c.type === 'text'; })[0];
+        if (block && block.text) return block.text;
+      }
+      // 기타 포맷
+      return node.text || node.output || node.message || null;
     }
 
     if (Array.isArray(parsed)) {
       var first = parsed[0] || {};
-      // text 필드 (Anthropic Message a Model 노드)
-      var candidate = first.text || first.output || first.content || null;
-      if (candidate !== null) {
-        var extracted = extractBooksFromStr(candidate);
+      var aiText = getTextFromNode(first);
+      if (aiText !== null) {
+        var extracted = extractBooksFromStr(aiText);
         if (extracted !== null) {
           booksList = extracted;
         } else {
-          // JSON이 아닌 에러 메시지
-          alert(String(candidate));
+          alert(String(aiText).slice(0, 200));
           show("input-section"); return;
         }
       } else {
         booksList = first.books || (first.json && first.json.books) || [];
       }
     } else {
-      // 최상위가 객체인 경우
-      var candidate2 = parsed.text || parsed.output || null;
-      if (candidate2 !== null) {
-        var extracted2 = extractBooksFromStr(candidate2);
+      var aiText2 = getTextFromNode(parsed);
+      if (aiText2 !== null) {
+        var extracted2 = extractBooksFromStr(aiText2);
         if (extracted2 !== null) {
           booksList = extracted2;
         } else {
-          alert(String(candidate2));
+          alert(String(aiText2).slice(0, 200));
           show("input-section"); return;
         }
       } else {
@@ -461,14 +479,14 @@ function go(chip) {
       card.className = "card";
       card.innerHTML = [
         '<span class="card-num">0' + (j + 1) + '</span>',
-        '<p class="card-genre">' + ((b.genre || "문학").toUpperCase()) + '</p>',
-        '<h2 class="card-title">' + b.title + '</h2>',
-        '<p class="card-author">' + b.author + ' · ' + b.publisher + ' (' + b.year + ')</p>',
+        '<p class="card-genre">' + escHtml((b.genre || "문학").toUpperCase()) + '</p>',
+        '<h2 class="card-title">' + escHtml(b.title) + '</h2>',
+        '<p class="card-author">' + escHtml(b.author) + ' · ' + escHtml(b.publisher) + ' (' + escHtml(b.year) + ')</p>',
         '<div class="cover-wrap">',
         '  <div id="' + phId + '" class="cover-placeholder"><div class="cover-loader"></div></div>',
-        '  <img id="' + imgId + '" class="book-cover" alt="' + b.title + ' 표지">',
+        '  <img id="' + imgId + '" class="book-cover" alt="' + escHtml(b.title) + ' 표지">',
         '</div>',
-        '<p class="card-reason">' + b.reason + '</p>',
+        '<p class="card-reason">' + escHtml(b.reason) + '</p>',
         '<div class="store-links">',
         '  <a class="store-link" href="https://www.aladin.co.kr/search/wsearchresult.aspx?SearchWord=' + searchQ + '&SearchTarget=Book" target="_blank" rel="noopener">알라딘</a>',
         '  <a class="store-link" href="https://www.yes24.com/Product/Search?domain=ALL&query=' + searchQ + '" target="_blank" rel="noopener">YES24</a>',
