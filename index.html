@@ -347,47 +347,24 @@ function show(id) {
   window.scrollTo(0, 0);
 }
 
-function loadCover(imgId, placeholderId, title) {
-  // Google Books API — API 키 불필요, CORS 프록시 불필요
-  var apiUrl = "https://www.googleapis.com/books/v1/volumes?q=intitle:"
-    + encodeURIComponent(title)
-    + "&langRestrict=ko&maxResults=1&printType=books";
+function loadCover(imgId, placeholderId, coverUrl) {
+  var img = document.getElementById(imgId);
+  var ph  = document.getElementById(placeholderId);
+  if (!img) return;
 
-  fetch(apiUrl)
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      var img = document.getElementById(imgId);
-      var ph  = document.getElementById(placeholderId);
-      if (!img) return;
-
-      var src = null;
-      if (data.items && data.items[0]) {
-        var imgLinks = data.items[0].volumeInfo.imageLinks;
-        if (imgLinks) {
-          // 가장 큰 이미지부터 순서대로 시도
-          src = (imgLinks.large || imgLinks.medium || imgLinks.small
-               || imgLinks.thumbnail || imgLinks.smallThumbnail || null);
-          if (src) src = src.replace(/^http:/, "https:").replace("zoom=1", "zoom=3");
-        }
-      }
-
-      if (src) {
-        img.onload = function() {
-          if (ph) ph.style.display = "none";
-          img.classList.add("loaded");
-        };
-        img.onerror = function() {
-          if (ph) ph.querySelector(".cover-loader").style.display = "none";
-        };
-        img.src = src;
-      } else {
-        if (ph) ph.querySelector(".cover-loader").style.display = "none";
-      }
-    })
-    .catch(function() {
-      var ph = document.getElementById(placeholderId);
+  if (coverUrl) {
+    var src = coverUrl.replace(/^http:/, "https:");
+    img.onload = function() {
+      if (ph) ph.style.display = "none";
+      img.classList.add("loaded");
+    };
+    img.onerror = function() {
       if (ph) ph.querySelector(".cover-loader").style.display = "none";
-    });
+    };
+    img.src = src;
+  } else {
+    if (ph) ph.querySelector(".cover-loader").style.display = "none";
+  }
 }
 
 function go(chip) {
@@ -494,8 +471,8 @@ function go(chip) {
 
       container.appendChild(card);
 
-      // 표지 비동기 로드
-      loadCover(imgId, phId, b.title);
+      // n8n이 알라딘에서 가져온 cover URL 직접 사용
+      loadCover(imgId, phId, b.cover || null);
     });
 
     show("result-section");
