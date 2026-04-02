@@ -8,7 +8,12 @@
 /* 문학찐의 영혼, 나눔명조 폰트 */
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap');
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { 
+  box-sizing: border-box; margin: 0; padding: 0; 
+  /* ★ 가독성 최적화 세팅 */
+  text-rendering: optimizeLegibility; 
+  -webkit-font-smoothing: antialiased; 
+}
 
 body { 
   font-family: 'Nanum Myeongjo', serif; 
@@ -18,12 +23,13 @@ body {
   justify-content: center; 
   align-items: center;
   padding: 2rem 1rem; 
-  color: #111;
+  color: #000;
+  /* ★ 핵심: 윈도우에서 명조체가 희끗하게 날아가는 걸 막기 위해 글씨에 0.4px 먹물 테두리를 강제로 칠합니다 */
+  -webkit-text-stroke: 0.4px #000; 
 }
 
 .wrap { width: 100%; max-width: 420px; }
 
-/* ★ 박스 크기 점프 현상 해결! 입력창, 로딩창, 결과카드의 뼈대를 완벽히 통일 */
 #input-section, #loading-section, .card { 
   background-color: #f1daba !important; 
   border: 1px solid #111; 
@@ -56,7 +62,7 @@ body {
 
 h1 { 
   font-size: 34px; 
-  font-weight: 800; /* 제목도 더 진하게 */
+  font-weight: 800; 
   letter-spacing: -1.5px; 
   margin-top: 5rem; 
   margin-bottom: 1rem; 
@@ -67,7 +73,7 @@ h1 {
 .sub { 
   font-size: 16px; 
   color: #000; 
-  font-weight: 700;
+  font-weight: 800;
   margin-bottom: 3rem; 
   letter-spacing: -0.5px;
 }
@@ -79,68 +85,66 @@ textarea {
   line-height: 1.8; 
   padding: 10px 0; 
   border: none; 
-  border-bottom: 1px solid #000; 
+  border-bottom: 1.5px solid #000; 
   outline: none; 
   color: #000; 
-  font-weight: 700;
+  font-weight: 800;
   background: transparent; 
   font-family: inherit; 
 }
-textarea::placeholder { color: #555; font-style: italic; }
+textarea::placeholder { color: #444; font-style: italic; -webkit-text-stroke: 0px; /* 플레이스홀더는 얇게 유지 */ }
 
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 2rem 0; }
 .chip { 
-  font-size: 12px; 
-  padding: 6px 12px; 
+  font-size: 13px; 
+  padding: 8px 14px; 
   border-radius: 0; 
-  border: 1px solid #111; 
+  border: 1px solid #000; 
   background: transparent; 
   color: #000; 
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer; 
   font-family: inherit; 
 }
-.chip:hover { background: #111; color: #f1daba; }
+.chip:hover { background: #111; color: #f1daba; -webkit-text-stroke: 0.4px #f1daba; }
 
 .btn { 
   margin-top: auto; 
   margin-bottom: 2.5rem; 
   width: 100%; 
   padding: 16px; 
-  font-size: 15px; 
+  font-size: 16px; 
   font-weight: 800; 
-  border: 1px solid #111; 
+  border: 1px solid #000; 
   background: transparent; 
   color: #000; 
   cursor: pointer; 
   font-family: inherit; 
   transition: all 0.2s;
 }
-.btn:hover { background: #111; color: #f1daba; }
+.btn:hover { background: #111; color: #f1daba; -webkit-text-stroke: 0.4px #f1daba; }
 
-/* ★ 로딩 섹션 스타일 수정 (박스가 쪼그라들지 않도록 내부 컨텐츠만 중앙 정렬) */
 .spinner-wrap { 
   display: flex; 
   flex-direction: column; 
   align-items: center; 
   justify-content: center; 
-  flex: 1; /* 남은 공간을 꽉 채움 */
+  flex: 1; 
 }
 .spinner { width: 36px; height: 36px; border: 2px solid #ccc; border-top: 2px solid #111; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 16px; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.spinner-label { font-size: 14px; font-weight: 800; color: #000; }
+.spinner-label { font-size: 15px; font-weight: 800; color: #000; }
 
 .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; width: 100%; }
-.result-query { font-size: 14px; font-weight: 800; color: #fff; } 
-.reset-btn { font-size: 13px; font-weight: 800; color: #fff; background: none; border: 1px solid #fff; padding: 4px 10px; cursor: pointer; font-family: inherit; }
+.result-query { font-size: 14px; font-weight: 800; color: #fff; -webkit-text-stroke: 0.3px #fff; } 
+.reset-btn { font-size: 13px; font-weight: 800; color: #fff; background: none; border: 1px solid #fff; padding: 4px 10px; cursor: pointer; font-family: inherit; -webkit-text-stroke: 0.3px #fff; }
 
 .cards { display: flex; flex-direction: column; gap: 24px; width: 100%; }
 
-/* ★ 글씨 희끗희끗함 완벽 해결: 투명도 박멸, 완전 검정(#000), 폰트 두께 최대로! */
-.card-genre { font-size: 13px; font-weight: 800; color: #000 !important; opacity: 1 !important; margin-bottom: 2rem; border-bottom: 1px solid #000; padding-bottom: 8px; display: inline-block; }
-.card-title { font-size: 26px; font-weight: 800; letter-spacing: -1px; line-height: 1.3; margin-bottom: 12px; color: #000 !important; opacity: 1 !important; }
-.card-author { font-size: 15px; font-weight: 800; color: #000 !important; opacity: 1 !important; margin-bottom: 1.5rem; }
-.card-reason { font-size: 15px; font-weight: 700; line-height: 1.8; color: #000 !important; opacity: 1 !important; flex: 1; }
+.card-genre { font-size: 13px; font-weight: 800; color: #000 !important; margin-bottom: 2rem; border-bottom: 1.5px solid #000; padding-bottom: 8px; display: inline-block; }
+.card-title { font-size: 26px; font-weight: 800; letter-spacing: -1px; line-height: 1.3; margin-bottom: 12px; color: #000 !important; }
+.card-author { font-size: 15px; font-weight: 800; color: #000 !important; margin-bottom: 1.5rem; }
+.card-reason { font-size: 15px; font-weight: 800; line-height: 1.8; color: #000 !important; flex: 1; }
 
 .cover-wrap { text-align: center; margin-bottom: 1.5rem; min-height: 150px; }
 .book-cover { 
@@ -151,8 +155,8 @@ textarea::placeholder { color: #555; font-style: italic; }
 }
 
 .store-links { display: flex; gap: 8px; margin-top: 2rem; flex-wrap: wrap; }
-.store-link { font-size: 12px; font-weight: 800; padding: 8px 0; width: calc(50% - 4px); text-align: center; border: 1px solid #000; text-decoration: none; color: #000; }
-.store-link:hover { background: #111; color: #f1daba; }
+.store-link { font-size: 13px; font-weight: 800; padding: 10px 0; width: calc(50% - 4px); text-align: center; border: 1px solid #000; text-decoration: none; color: #000; }
+.store-link:hover { background: #111; color: #f1daba; -webkit-text-stroke: 0.4px #f1daba; }
 
 #loading-section { display: none; }
 #result-section { display: none; }
@@ -208,7 +212,7 @@ var STORES = [
 function show(id) {
   document.getElementById("input-section").style.display = id === "input" ? "flex" : "none";
   document.getElementById("loading-section").style.display = id === "loading" ? "flex" : "none";
-  document.getElementById("result-section").style.display = id === "result" ? "flex" : "none"; // flex로 통일
+  document.getElementById("result-section").style.display = id === "result" ? "flex" : "none";
 }
 
 function go(chip) {
