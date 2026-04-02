@@ -99,7 +99,7 @@ function go(chip) {
   }).then(function(r) {
     return r.json();
   }).then(function(data) {
-    var raw = typeof data === "string" ? data : (data.text || JSON.stringify(data));
+    var raw = typeof data === "string" ? data : JSON.stringify(data);
     raw = raw.replace(/```json/g, "").replace(/```/g, "").trim();
     var parsed = JSON.parse(raw);
 
