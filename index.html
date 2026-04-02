@@ -391,37 +391,45 @@ function go(chip) {
     console.log('[webhook raw]', raw);
     console.log('[parsed]', parsed);
 
-    // ★ n8n AI 에이전트 응답 파싱 — 여러 포맷 처리
-    // n8n은 보통 [{output: "AI응답텍스트"}] 형태로 반환
+    // ★ n8n 응답 파싱 — 모든 포맷 처리
+    // n8n Anthropic 노드: [{text: "AI응답"}]
+    // n8n AI Agent 노드: [{output: "AI응답"}]
+    // 직접 반환: {"books":[...]} 또는 [{"books":[...]}]
     var booksList;
+
+    function extractBooksFromStr(str) {
+      var s = String(str).replace(/```json/gi, "").replace(/```/g, "").trim();
+      try {
+        var p = JSON.parse(s);
+        return p.books || null;
+      } catch(e) { return null; }
+    }
 
     if (Array.isArray(parsed)) {
       var first = parsed[0] || {};
-
-      if (first.output !== undefined) {
-        // 가장 흔한 n8n AI 에이전트 포맷: [{output: "JSON 또는 에러텍스트"}]
-        var outputStr = String(first.output).replace(/```json/gi, "").replace(/```/g, "").trim();
-        try {
-          var outputParsed = JSON.parse(outputStr);
-          booksList = outputParsed.books || [];
-        } catch(e) {
-          // output이 JSON이 아닌 에러 메시지 텍스트인 경우
-          alert(first.output || "처방할 책을 찾지 못했습니다. 조금 더 상세히 적어주세요!");
+      // text 필드 (Anthropic Message a Model 노드)
+      var candidate = first.text || first.output || first.content || null;
+      if (candidate !== null) {
+        var extracted = extractBooksFromStr(candidate);
+        if (extracted !== null) {
+          booksList = extracted;
+        } else {
+          // JSON이 아닌 에러 메시지
+          alert(String(candidate));
           show("input-section"); return;
         }
       } else {
-        // [{books:[...]}, ...] 또는 [{json:{books:[...]}}] 형식
         booksList = first.books || (first.json && first.json.books) || [];
       }
     } else {
-      // {books:[...]} 일반 형식 또는 {output: "..."}
-      if (parsed.output !== undefined) {
-        var outputStr2 = String(parsed.output).replace(/```json/gi, "").replace(/```/g, "").trim();
-        try {
-          var outputParsed2 = JSON.parse(outputStr2);
-          booksList = outputParsed2.books || [];
-        } catch(e) {
-          alert(parsed.output || "처방할 책을 찾지 못했습니다. 조금 더 상세히 적어주세요!");
+      // 최상위가 객체인 경우
+      var candidate2 = parsed.text || parsed.output || null;
+      if (candidate2 !== null) {
+        var extracted2 = extractBooksFromStr(candidate2);
+        if (extracted2 !== null) {
+          booksList = extracted2;
+        } else {
+          alert(String(candidate2));
           show("input-section"); return;
         }
       } else {
