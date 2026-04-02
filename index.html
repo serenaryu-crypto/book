@@ -8,12 +8,7 @@
 /* 문학찐의 영혼, 나눔명조 폰트 */
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap');
 
-* { 
-  box-sizing: border-box; margin: 0; padding: 0; 
-  /* ★ 가독성 최적화 세팅 */
-  text-rendering: optimizeLegibility; 
-  -webkit-font-smoothing: antialiased; 
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body { 
   font-family: 'Nanum Myeongjo', serif; 
@@ -22,30 +17,32 @@ body {
   display: flex; 
   justify-content: center; 
   align-items: center;
-  padding: 2rem 1rem; 
+  padding: 1rem; 
   color: #000;
-  /* ★ 핵심: 윈도우에서 명조체가 희끗하게 날아가는 걸 막기 위해 글씨에 0.4px 먹물 테두리를 강제로 칠합니다 */
-  -webkit-text-stroke: 0.4px #000; 
+  text-rendering: optimizeLegibility;
 }
 
 .wrap { width: 100%; max-width: 420px; }
 
+/* ★ 메인 박스 디자인 (희끗함 방지를 위해 테두리 두께 조절) */
 #input-section, #loading-section, .card { 
   background-color: #f1daba !important; 
-  border: 1px solid #111; 
-  padding: 3rem 2.5rem; 
+  border: 1.5px solid #111; 
+  padding: 3rem 2rem; 
   position: relative;
   min-height: 600px; 
   display: flex;
   flex-direction: column;
-  box-shadow: 10px 10px 20px rgba(0,0,0,0.15); 
+  box-shadow: 10px 10px 0px rgba(0,0,0,0.1); 
   width: 100%;
+  /* 명조체 뭉침 방지 */
+  -webkit-text-stroke: 0.1px #000; 
 }
 
 .book-series {
   position: absolute;
-  top: 2rem;
-  right: 2.5rem;
+  top: 1.5rem;
+  right: 2rem;
   font-size: 11px;
   font-weight: 800;
   letter-spacing: -0.5px;
@@ -54,28 +51,26 @@ body {
 .publisher-logo {
   position: absolute;
   bottom: 1.5rem; 
-  left: 2.5rem;
+  left: 2rem;
   font-size: 13px;
   font-weight: 800;
   letter-spacing: -0.5px;
 }
 
 h1 { 
-  font-size: 34px; 
+  font-size: 32px; 
   font-weight: 800; 
   letter-spacing: -1.5px; 
-  margin-top: 5rem; 
+  margin-top: 4rem; 
   margin-bottom: 1rem; 
   line-height: 1.2;
-  color: #000;
 }
 
 .sub { 
-  font-size: 16px; 
-  color: #000; 
+  font-size: 15px; 
+  color: #222; 
   font-weight: 800;
-  margin-bottom: 3rem; 
-  letter-spacing: -0.5px;
+  margin-bottom: 2.5rem; 
 }
 
 textarea { 
@@ -85,20 +80,18 @@ textarea {
   line-height: 1.8; 
   padding: 10px 0; 
   border: none; 
-  border-bottom: 1.5px solid #000; 
+  border-bottom: 2px solid #000; 
   outline: none; 
   color: #000; 
   font-weight: 800;
   background: transparent; 
   font-family: inherit; 
 }
-textarea::placeholder { color: #444; font-style: italic; -webkit-text-stroke: 0px; /* 플레이스홀더는 얇게 유지 */ }
 
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 2rem 0; }
 .chip { 
-  font-size: 13px; 
-  padding: 8px 14px; 
-  border-radius: 0; 
+  font-size: 12px; 
+  padding: 8px 12px; 
   border: 1px solid #000; 
   background: transparent; 
   color: #000; 
@@ -106,60 +99,82 @@ textarea::placeholder { color: #444; font-style: italic; -webkit-text-stroke: 0p
   cursor: pointer; 
   font-family: inherit; 
 }
-.chip:hover { background: #111; color: #f1daba; -webkit-text-stroke: 0.4px #f1daba; }
 
 .btn { 
   margin-top: auto; 
-  margin-bottom: 2.5rem; 
+  margin-bottom: 2rem; 
   width: 100%; 
   padding: 16px; 
   font-size: 16px; 
   font-weight: 800; 
-  border: 1px solid #000; 
+  border: 1.5px solid #000; 
   background: transparent; 
-  color: #000; 
   cursor: pointer; 
   font-family: inherit; 
-  transition: all 0.2s;
 }
-.btn:hover { background: #111; color: #f1daba; -webkit-text-stroke: 0.4px #f1daba; }
+.btn:hover { background: #000; color: #f1daba; }
 
-.spinner-wrap { 
+/* ★ 결과 페이지 상단 (겹침 문제 해결) */
+.result-header { 
   display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  justify-content: center; 
-  flex: 1; 
+  flex-direction: column; /* 세로 배치로 변경하여 겹침 방지 */
+  gap: 12px;
+  margin-bottom: 24px; 
+  width: 100%; 
 }
-.spinner { width: 36px; height: 36px; border: 2px solid #ccc; border-top: 2px solid #111; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 16px; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.spinner-label { font-size: 15px; font-weight: 800; color: #000; }
+.result-query { 
+  font-size: 18px; 
+  font-weight: 800; 
+  color: #fff; 
+  line-height: 1.4;
+  word-break: keep-all;
+} 
+.reset-btn { 
+  align-self: flex-start;
+  font-size: 12px; 
+  font-weight: 800; 
+  color: #fff; 
+  background: none; 
+  border: 1.5px solid #fff; 
+  padding: 6px 12px; 
+  cursor: pointer; 
+  font-family: inherit; 
+}
 
-.result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; width: 100%; }
-.result-query { font-size: 14px; font-weight: 800; color: #fff; -webkit-text-stroke: 0.3px #fff; } 
-.reset-btn { font-size: 13px; font-weight: 800; color: #fff; background: none; border: 1px solid #fff; padding: 4px 10px; cursor: pointer; font-family: inherit; -webkit-text-stroke: 0.3px #fff; }
+.cards { display: flex; flex-direction: column; gap: 32px; width: 100%; }
 
-.cards { display: flex; flex-direction: column; gap: 24px; width: 100%; }
+.card-genre { font-size: 12px; font-weight: 800; color: #000; margin-bottom: 1.5rem; border-bottom: 2px solid #000; padding-bottom: 4px; display: inline-block; }
+.card-title { font-size: 24px; font-weight: 800; line-height: 1.3; margin-bottom: 10px; }
+.card-author { font-size: 14px; font-weight: 800; margin-bottom: 1.5rem; }
 
-.card-genre { font-size: 13px; font-weight: 800; color: #000 !important; margin-bottom: 2rem; border-bottom: 1.5px solid #000; padding-bottom: 8px; display: inline-block; }
-.card-title { font-size: 26px; font-weight: 800; letter-spacing: -1px; line-height: 1.3; margin-bottom: 12px; color: #000 !important; }
-.card-author { font-size: 15px; font-weight: 800; color: #000 !important; margin-bottom: 1.5rem; }
-.card-reason { font-size: 15px; font-weight: 800; line-height: 1.8; color: #000 !important; flex: 1; }
-
-.cover-wrap { text-align: center; margin-bottom: 1.5rem; min-height: 150px; }
+.cover-wrap { text-align: center; margin-bottom: 1.5rem; }
 .book-cover { 
-  max-width: 140px; 
-  box-shadow: 5px 5px 15px rgba(0,0,0,0.2); 
-  border: 1px solid #ddd; 
+  max-width: 150px; 
+  box-shadow: 10px 10px 20px rgba(0,0,0,0.2); 
   display: none; 
 }
 
-.store-links { display: flex; gap: 8px; margin-top: 2rem; flex-wrap: wrap; }
-.store-link { font-size: 13px; font-weight: 800; padding: 10px 0; width: calc(50% - 4px); text-align: center; border: 1px solid #000; text-decoration: none; color: #000; }
-.store-link:hover { background: #111; color: #f1daba; -webkit-text-stroke: 0.4px #f1daba; }
+.card-reason { font-size: 15px; font-weight: 700; line-height: 1.8; margin-bottom: 2rem; }
+
+.store-links { display: flex; gap: 10px; flex-wrap: wrap; }
+.store-link { 
+  font-size: 12px; 
+  font-weight: 800; 
+  padding: 10px 0; 
+  width: calc(50% - 5px); 
+  text-align: center; 
+  border: 1px solid #000; 
+  text-decoration: none; 
+  color: #000; 
+}
 
 #loading-section { display: none; }
 #result-section { display: none; }
+
+/* 로딩 스피너 */
+.spinner-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; }
+.spinner { width: 40px; height: 40px; border: 4px solid rgba(0,0,0,0.1); border-top: 4px solid #000; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+@keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
@@ -167,32 +182,29 @@ textarea::placeholder { color: #444; font-style: italic; -webkit-text-stroke: 0p
   <div id="input-section">
     <div class="book-series">나만의 문학 큐레이터 001</div>
     <h1>어떤 책이<br>필요해요?</h1>
-    <p class="sub">당신의 상황을 적어주세요</p>
-    
-    <textarea id="query" rows="4" placeholder="요즘 너무 지쳐서 위로가 되는 고전 소설이 필요해..."></textarea>
-    
+    <p class="sub">당신의 오늘에 문장을 처방합니다.</p>
+    <textarea id="query" rows="3" placeholder="예: 여름밤에 어울리는 한국 단편 소설"></textarea>
     <div class="chips">
-      <button class="chip" onclick="go('밑바닥까지 우울한 소설')">밑바닥까지 우울한 소설</button>
-      <button class="chip" onclick="go('문장이 압도적으로 아름다운 책')">문장이 압도적으로 아름다운 책</button>
-      <button class="chip" onclick="go('여름밤에 어울리는 단편')">여름밤에 어울리는 단편</button>
-      <button class="chip" onclick="go('인생의 방향을 잃었을 때')">인생의 방향을 잃었을 때</button> 
+      <button class="chip" onclick="go('밑바닥까지 우울한 소설')">#우울한_소설</button>
+      <button class="chip" onclick="go('문장이 아름다운 민음사 책')">#아름다운_문장</button>
+      <button class="chip" onclick="go('여름밤에 어울리는 단편')">#여름밤_단편</button>
+      <button class="chip" onclick="go('인생의 방향을 잃었을 때')">#인생의_나침반</button> 
     </div>
-    
-    <button class="btn" id="main-btn" onclick="go(null)">책 처방받기</button>
+    <button class="btn" onclick="go(null)">책 처방받기</button>
     <div class="publisher-logo">나만의 출판사</div>
   </div>
 
   <div id="loading-section">
     <div class="spinner-wrap">
       <div class="spinner"></div>
-      <p class="spinner-label">서재를 뒤지는 중...</p>
+      <p style="font-weight:800;">서재를 뒤지는 중...</p>
     </div>
   </div>
 
   <div id="result-section">
     <div class="result-header">
       <span class="result-query" id="rq"></span>
-      <button class="reset-btn" onclick="goBack()">표지로 돌아가기</button>
+      <button class="reset-btn" onclick="goBack()">← 다른 책 처방받기</button>
     </div>
     <div class="cards" id="cards"></div>
   </div>
@@ -202,17 +214,11 @@ textarea::placeholder { color: #444; font-style: italic; -webkit-text-stroke: 0p
 var WEBHOOK_URL = "https://serenaryu89.app.n8n.cloud/webhook/4960dd64-2eaf-444d-9920-0194eb7f3e2a";
 var ALADIN_TTB_KEY = "ttb-koeun-mail0329001";
 
-var STORES = [
-  { name: "알라딘", base: "https://www.aladin.co.kr/search/wsearchresult.aspx?SearchWord=", suffix: "&SearchTarget=Book" },
-  { name: "YES24", base: "https://www.yes24.com/Product/Search?domain=ALL&query=", suffix: "" },
-  { name: "교보문고", base: "https://search.kyobobook.co.kr/search?keyword=", suffix: "" },
-  { name: "쿠팡", base: "https://www.coupang.com/np/search?q=", suffix: "" }
-];
-
 function show(id) {
   document.getElementById("input-section").style.display = id === "input" ? "flex" : "none";
   document.getElementById("loading-section").style.display = id === "loading" ? "flex" : "none";
-  document.getElementById("result-section").style.display = id === "result" ? "flex" : "none";
+  document.getElementById("result-section").style.display = id === "result" ? "block" : "none";
+  window.scrollTo(0,0);
 }
 
 function go(chip) {
@@ -224,77 +230,55 @@ function go(chip) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query: q })
-  }).then(function(r) {
-    return r.text(); 
-  }).then(function(data) {
+  }).then(r => r.text()).then(data => {
     var raw = data.replace(/```json/gi, "").replace(/```/g, "").trim();
     var parsed = JSON.parse(raw);
+    if(!parsed.books || parsed.books.length === 0) {
+        alert("적절한 책을 찾지 못했습니다. 조금 더 구체적으로 적어주세요!");
+        show("input");
+        return;
+    }
 
-    document.getElementById("rq").textContent = "\u201c" + q + "\u201d";
+    document.getElementById("rq").textContent = "“" + q + "”";
     var el = document.getElementById("cards");
     el.innerHTML = "";
 
-    parsed.books.forEach(function(b, j) {
-      var links = "";
-      for (var k = 0; k < STORES.length; k++) {
-        var s = STORES[k];
-        links += "<a class='store-link' href='" + s.base + encodeURIComponent(b.title) + s.suffix + "' target='_blank'>" + s.name + "</a>";
-      }
-      
+    parsed.books.forEach((b, j) => {
+      var imgId = "cover-" + j;
       var card = document.createElement("div");
       card.className = "card";
-      
-      var publisherText = b.publisher ? " · " + b.publisher : "";
-      var yearText = b.year ? " (" + b.year + ")" : "";
-      
-      var imgId = "cover-" + j;
-      
-      card.innerHTML =
-        "<p class='card-genre'>" + (b.genre || "").toUpperCase() + "</p>" +
-        "<h2 class='card-title'>" + b.title + "</h2>" +
-        "<p class='card-author'>" + b.author + publisherText + yearText + "</p>" +
-        "<div class='cover-wrap'><img id='" + imgId + "' class='book-cover' src='' alt='" + b.title + " 표지'></div>" +
-        "<p class='card-reason'>" + b.reason + "</p>" +
-        "<div class='store-links'>" + links + "</div>";
-        
+      card.innerHTML = `
+        <p class="card-genre">${(b.genre || "문학").toUpperCase()}</p>
+        <h2 class="card-title">${b.title}</h2>
+        <p class="card-author">${b.author} · ${b.publisher} (${b.year})</p>
+        <div class="cover-wrap"><img id="${imgId}" class="book-cover" src="" alt="표지"></div>
+        <p class="card-reason">${b.reason}</p>
+        <div class="store-links">
+          <a class="store-link" href="https://www.aladin.co.kr/search/wsearchresult.aspx?SearchWord=${encodeURIComponent(b.title)}" target="_blank">알라딘</a>
+          <a class="store-link" href="https://search.kyobobook.co.kr/search?keyword=${encodeURIComponent(b.title)}" target="_blank">교보문고</a>
+        </div>
+      `;
       el.appendChild(card);
 
-      var aladinApiUrl = "http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey=" + ALADIN_TTB_KEY + "&Query=" + encodeURIComponent(b.title) + "&QueryType=Title&MaxResults=1&start=1&SearchTarget=Book&output=js&Version=20131101";
-      var proxyUrl = "https://api.allorigins.win/get?url=" + encodeURIComponent(aladinApiUrl);
-
-      fetch(proxyUrl)
-        .then(function(res) { return res.json(); })
-        .then(function(proxyData) {
-          var aladinData = JSON.parse(proxyData.contents);
-          if (aladinData.item && aladinData.item.length > 0) {
-            var coverImgUrl = aladinData.item[0].cover;
-            var imgElement = document.getElementById(imgId);
-            if (imgElement && coverImgUrl) {
-              imgElement.src = coverImgUrl.replace('coversum', 'cover200');
-              imgElement.style.display = "inline-block";
-            }
+      // 알라딘 표지 로드
+      fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(`http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey=${ALADIN_TTB_KEY}&Query=${encodeURIComponent(b.title)}&MaxResults=1&output=js&Version=20131101`)}`)
+        .then(res => res.json()).then(proxyData => {
+          var aladin = JSON.parse(proxyData.contents);
+          if (aladin.item && aladin.item[0]) {
+            var img = document.getElementById(imgId);
+            img.src = aladin.item[0].cover.replace('coversum', 'cover500');
+            img.style.display = "inline-block";
           }
-        })
-        .catch(function(err) {
-          console.log("표지 로드 실패:", err);
         });
     });
-    
     show("result");
-  }).catch(function(e) {
+  }).catch(e => {
     show("input");
-    alert("다시 시도해주세요: " + e.message);
+    alert("오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
   });
 }
 
-function goBack() {
-  show("input");
-  document.getElementById("query").value = "";
-}
-
-document.getElementById("query").addEventListener("keydown", function(e) {
-  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); go(null); }
-});
+function goBack() { show("input"); document.getElementById("query").value = ""; }
 </script>
 </body>
 </html>
