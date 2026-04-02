@@ -121,7 +121,7 @@ function go(chip) {
       card.innerHTML =
         "<p class='card-genre' style='color:" + p.text + ";'>" + (b.genre || "").toUpperCase() + "</p>" +
         "<h2 class='card-title' style='color:" + p.text + ";'>" + b.title + "</h2>" +
-        "<p class='card-author' style='color:" + p.text + ";'>" + b.author + "</p>" +
+        "<p class='card-author' style='color:" + p.text + ";'>" + b.author + " · " + b.publisher + " (" + b.year + ")</p>" +
         "<p class='card-reason' style='color:" + p.text + ";'>" + b.reason + "</p>" +
         "<div class='store-links'>" + links + "</div>";
       el.appendChild(card);
