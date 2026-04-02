@@ -23,7 +23,8 @@ body {
 
 .wrap { width: 100%; max-width: 420px; }
 
-#input-section, .card { 
+/* ★ 박스 크기 점프 현상 해결! 입력창, 로딩창, 결과카드의 뼈대를 완벽히 통일 */
+#input-section, #loading-section, .card { 
   background-color: #f1daba !important; 
   border: 1px solid #111; 
   padding: 3rem 2.5rem; 
@@ -32,6 +33,7 @@ body {
   display: flex;
   flex-direction: column;
   box-shadow: 10px 10px 20px rgba(0,0,0,0.15); 
+  width: 100%;
 }
 
 .book-series {
@@ -45,7 +47,7 @@ body {
 
 .publisher-logo {
   position: absolute;
-  bottom: 1.5rem; /* 로고를 살짝 더 아래로 내려서 공간 확보 */
+  bottom: 1.5rem; 
   left: 2.5rem;
   font-size: 13px;
   font-weight: 800;
@@ -54,16 +56,18 @@ body {
 
 h1 { 
   font-size: 34px; 
-  font-weight: 400; 
+  font-weight: 800; /* 제목도 더 진하게 */
   letter-spacing: -1.5px; 
   margin-top: 5rem; 
   margin-bottom: 1rem; 
   line-height: 1.2;
+  color: #000;
 }
 
 .sub { 
   font-size: 16px; 
-  color: #333; 
+  color: #000; 
+  font-weight: 700;
   margin-bottom: 3rem; 
   letter-spacing: -0.5px;
 }
@@ -75,13 +79,14 @@ textarea {
   line-height: 1.8; 
   padding: 10px 0; 
   border: none; 
-  border-bottom: 1px solid #555; 
+  border-bottom: 1px solid #000; 
   outline: none; 
-  color: #111; 
+  color: #000; 
+  font-weight: 700;
   background: transparent; 
   font-family: inherit; 
 }
-textarea::placeholder { color: #888; font-style: italic; }
+textarea::placeholder { color: #555; font-style: italic; }
 
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 2rem 0; }
 .chip { 
@@ -90,7 +95,8 @@ textarea::placeholder { color: #888; font-style: italic; }
   border-radius: 0; 
   border: 1px solid #111; 
   background: transparent; 
-  color: #111; 
+  color: #000; 
+  font-weight: 700;
   cursor: pointer; 
   font-family: inherit; 
 }
@@ -98,36 +104,43 @@ textarea::placeholder { color: #888; font-style: italic; }
 
 .btn { 
   margin-top: auto; 
-  margin-bottom: 2.5rem; /* ★ 버튼 아래쪽 여백을 줘서 출판사 로고와 겹치지 않게 수정! */
+  margin-bottom: 2.5rem; 
   width: 100%; 
   padding: 16px; 
   font-size: 15px; 
   font-weight: 800; 
   border: 1px solid #111; 
   background: transparent; 
-  color: #111; 
+  color: #000; 
   cursor: pointer; 
   font-family: inherit; 
   transition: all 0.2s;
 }
 .btn:hover { background: #111; color: #f1daba; }
 
-.spinner-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 600px; gap: 16px; background-color: #f1daba; border: 1px solid #111; box-shadow: 10px 10px 20px rgba(0,0,0,0.15); }
-.spinner { width: 36px; height: 36px; border: 2px solid #ccc; border-top: 2px solid #111; border-radius: 50%; animation: spin 0.8s linear infinite; }
+/* ★ 로딩 섹션 스타일 수정 (박스가 쪼그라들지 않도록 내부 컨텐츠만 중앙 정렬) */
+.spinner-wrap { 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  flex: 1; /* 남은 공간을 꽉 채움 */
+}
+.spinner { width: 36px; height: 36px; border: 2px solid #ccc; border-top: 2px solid #111; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 16px; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.spinner-label { font-size: 13px; font-weight: 700; }
+.spinner-label { font-size: 14px; font-weight: 800; color: #000; }
 
-.result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.result-query { font-size: 14px; font-weight: 700; color: #fff; } 
-.reset-btn { font-size: 13px; font-weight: 700; color: #fff; background: none; border: 1px solid #fff; padding: 4px 10px; cursor: pointer; font-family: inherit; }
+.result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; width: 100%; }
+.result-query { font-size: 14px; font-weight: 800; color: #fff; } 
+.reset-btn { font-size: 13px; font-weight: 800; color: #fff; background: none; border: 1px solid #fff; padding: 4px 10px; cursor: pointer; font-family: inherit; }
 
-.cards { display: flex; flex-direction: column; gap: 24px; }
+.cards { display: flex; flex-direction: column; gap: 24px; width: 100%; }
 
-/* ★ 흐릿했던 글씨 문제를 해결 (투명도 없애고 완전한 검정색 적용) */
-.card-genre { font-size: 12px; font-weight: 800; color: #000; margin-bottom: 2rem; border-bottom: 1px solid #000; padding-bottom: 8px; display: inline-block; }
-.card-title { font-size: 26px; font-weight: 800; letter-spacing: -1px; line-height: 1.3; margin-bottom: 12px; color: #000; }
-.card-author { font-size: 14px; font-weight: 700; color: #000; margin-bottom: 1.5rem; }
-.card-reason { font-size: 15px; line-height: 1.8; color: #111; flex: 1; }
+/* ★ 글씨 희끗희끗함 완벽 해결: 투명도 박멸, 완전 검정(#000), 폰트 두께 최대로! */
+.card-genre { font-size: 13px; font-weight: 800; color: #000 !important; opacity: 1 !important; margin-bottom: 2rem; border-bottom: 1px solid #000; padding-bottom: 8px; display: inline-block; }
+.card-title { font-size: 26px; font-weight: 800; letter-spacing: -1px; line-height: 1.3; margin-bottom: 12px; color: #000 !important; opacity: 1 !important; }
+.card-author { font-size: 15px; font-weight: 800; color: #000 !important; opacity: 1 !important; margin-bottom: 1.5rem; }
+.card-reason { font-size: 15px; font-weight: 700; line-height: 1.8; color: #000 !important; opacity: 1 !important; flex: 1; }
 
 .cover-wrap { text-align: center; margin-bottom: 1.5rem; min-height: 150px; }
 .book-cover { 
@@ -138,7 +151,7 @@ textarea::placeholder { color: #888; font-style: italic; }
 }
 
 .store-links { display: flex; gap: 8px; margin-top: 2rem; flex-wrap: wrap; }
-.store-link { font-size: 12px; font-weight: 700; padding: 8px 0; width: calc(50% - 4px); text-align: center; border: 1px solid #111; text-decoration: none; color: #111; }
+.store-link { font-size: 12px; font-weight: 800; padding: 8px 0; width: calc(50% - 4px); text-align: center; border: 1px solid #000; text-decoration: none; color: #000; }
 .store-link:hover { background: #111; color: #f1daba; }
 
 #loading-section { display: none; }
@@ -195,7 +208,7 @@ var STORES = [
 function show(id) {
   document.getElementById("input-section").style.display = id === "input" ? "flex" : "none";
   document.getElementById("loading-section").style.display = id === "loading" ? "flex" : "none";
-  document.getElementById("result-section").style.display = id === "result" ? "block" : "none";
+  document.getElementById("result-section").style.display = id === "result" ? "flex" : "none"; // flex로 통일
 }
 
 function go(chip) {
