@@ -3,34 +3,143 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>책 추천</title>
+<title>나만의 문학 큐레이터</title>
 <style>
+/* 문학찐의 영혼, 나눔명조 폰트 */
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap');
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, 'Apple SD Gothic Neo', sans-serif; background: #f7f5f2; min-height: 100vh; display: flex; justify-content: center; padding: 3rem 1.25rem; }
-.wrap { width: 100%; max-width: 480px; }
-h1 { font-size: 24px; font-weight: 500; color: #111; letter-spacing: -0.5px; margin-bottom: 6px; }
-.sub { font-size: 13px; color: #bbb; margin-bottom: 2rem; }
-textarea { width: 100%; resize: none; font-size: 15px; line-height: 1.7; padding: 0 0 12px; border: none; border-bottom: 1.5px solid #ddd; outline: none; color: #111; background: transparent; font-family: inherit; }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; }
-.chip { font-size: 12px; padding: 6px 14px; border-radius: 999px; border: 1px solid #ddd; background: #fff; color: #666; cursor: pointer; font-family: inherit; }
-.chip:hover { background: #f0f0f0; }
-.btn { width: 100%; padding: 14px; font-size: 14px; font-weight: 500; border: none; background: #111; color: #fff; cursor: pointer; font-family: inherit; }
-.btn:disabled { background: #eee; color: #aaa; cursor: not-allowed; }
-.spinner-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 300px; gap: 16px; }
-.spinner { width: 36px; height: 36px; border: 2px solid #eee; border-top: 2px solid #111; border-radius: 50%; animation: spin 0.8s linear infinite; }
+
+body { 
+  font-family: 'Nanum Myeongjo', serif; 
+  background: #8faadc; 
+  min-height: 100vh; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+  padding: 2rem 1rem; 
+  color: #111;
+}
+
+.wrap { width: 100%; max-width: 420px; }
+
+#input-section, .card { 
+  background-color: #f1daba !important; 
+  border: 1px solid #111; 
+  padding: 3rem 2.5rem; 
+  position: relative;
+  min-height: 600px; 
+  display: flex;
+  flex-direction: column;
+  box-shadow: 10px 10px 20px rgba(0,0,0,0.15); 
+}
+
+.book-series {
+  position: absolute;
+  top: 2rem;
+  right: 2.5rem;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.publisher-logo {
+  position: absolute;
+  bottom: 2rem;
+  left: 2.5rem;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+h1 { 
+  font-size: 34px; 
+  font-weight: 400; 
+  letter-spacing: -1.5px; 
+  margin-top: 5rem; 
+  margin-bottom: 1rem; 
+  line-height: 1.2;
+}
+
+.sub { 
+  font-size: 16px; 
+  color: #333; 
+  margin-bottom: 3rem; 
+  letter-spacing: -0.5px;
+}
+
+textarea { 
+  width: 100%; 
+  resize: none; 
+  font-size: 15px; 
+  line-height: 1.8; 
+  padding: 10px 0; 
+  border: none; 
+  border-bottom: 1px solid #555; 
+  outline: none; 
+  color: #111; 
+  background: transparent; 
+  font-family: inherit; 
+}
+textarea::placeholder { color: #888; font-style: italic; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 2rem 0; }
+.chip { 
+  font-size: 12px; 
+  padding: 6px 12px; 
+  border-radius: 0; 
+  border: 1px solid #111; 
+  background: transparent; 
+  color: #111; 
+  cursor: pointer; 
+  font-family: inherit; 
+}
+.chip:hover { background: #111; color: #f1daba; }
+
+.btn { 
+  margin-top: auto; 
+  width: 100%; 
+  padding: 16px; 
+  font-size: 15px; 
+  font-weight: 800; 
+  border: 1px solid #111; 
+  background: transparent; 
+  color: #111; 
+  cursor: pointer; 
+  font-family: inherit; 
+  transition: all 0.2s;
+}
+.btn:hover { background: #111; color: #f1daba; }
+
+.spinner-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 600px; gap: 16px; background-color: #f1daba; border: 1px solid #111; box-shadow: 10px 10px 20px rgba(0,0,0,0.15); }
+.spinner { width: 36px; height: 36px; border: 2px solid #ccc; border-top: 2px solid #111; border-radius: 50%; animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.spinner-label { font-size: 13px; color: #aaa; }
-.result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
-.result-query { font-size: 12px; color: #aaa; }
-.reset-btn { font-size: 12px; color: #aaa; background: none; border: none; cursor: pointer; font-family: inherit; }
-.cards { display: flex; flex-direction: column; gap: 20px; }
-.card { border-radius: 4px; padding: 2.5rem 2rem; display: flex; flex-direction: column; min-height: 220px; }
-.card-genre { font-size: 11px; opacity: 0.5; letter-spacing: 1px; margin-bottom: 24px; }
-.card-title { font-size: 22px; font-weight: 500; letter-spacing: -0.5px; line-height: 1.3; margin-bottom: 8px; }
-.card-author { font-size: 13px; opacity: 0.65; margin-bottom: 20px; }
-.card-reason { font-size: 13px; opacity: 0.75; line-height: 1.7; flex: 1; }
-.store-links { display: flex; gap: 10px; margin-top: 28px; flex-wrap: wrap; }
-.store-link { font-size: 11px; padding: 6px 14px; border-radius: 999px; text-decoration: none; opacity: 0.8; }
+.spinner-label { font-size: 13px; font-weight: 700; }
+
+.result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.result-query { font-size: 14px; font-weight: 700; color: #fff; } 
+.reset-btn { font-size: 13px; font-weight: 700; color: #fff; background: none; border: 1px solid #fff; padding: 4px 10px; cursor: pointer; font-family: inherit; }
+
+.cards { display: flex; flex-direction: column; gap: 24px; }
+
+.card-genre { font-size: 12px; font-weight: 800; opacity: 0.8; margin-bottom: 2rem; border-bottom: 1px solid #111; padding-bottom: 8px; display: inline-block; }
+.card-title { font-size: 26px; font-weight: 800; letter-spacing: -1px; line-height: 1.3; margin-bottom: 12px; }
+.card-author { font-size: 14px; opacity: 0.8; margin-bottom: 1.5rem; }
+
+/* 표지 이미지 스타일 (고전적인 액자 느낌) */
+.cover-wrap { text-align: center; margin-bottom: 1.5rem; min-height: 150px; }
+.book-cover { 
+  max-width: 140px; 
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.2); 
+  border: 1px solid #ddd; 
+  display: none; /* 이미지가 불러와지면 나타남 */
+}
+
+.card-reason { font-size: 15px; line-height: 1.8; flex: 1; }
+.store-links { display: flex; gap: 8px; margin-top: 2rem; flex-wrap: wrap; }
+.store-link { font-size: 12px; font-weight: 700; padding: 8px 0; width: calc(50% - 4px); text-align: center; border: 1px solid #111; text-decoration: none; color: #111; }
+.store-link:hover { background: #111; color: #f1daba; }
+
 #loading-section { display: none; }
 #result-section { display: none; }
 </style>
@@ -38,43 +147,44 @@ textarea { width: 100%; resize: none; font-size: 15px; line-height: 1.7; padding
 <body>
 <div class="wrap">
   <div id="input-section">
-    <h1>어떤 책이 필요해요?</h1>
-    <p class="sub">지금 상황이나 기분을 편하게 적어보세요</p>
-    <textarea id="query" rows="4" placeholder="요즘 너무 지쳐서 가볍게 읽을 수 있는 책이 필요해..."></textarea>
+    <div class="book-series">나만의 문학 큐레이터 001</div>
+    <h1>어떤 책이<br>필요해요?</h1>
+    <p class="sub">당신의 상황을 적어주세요</p>
+    
+    <textarea id="query" rows="4" placeholder="요즘 너무 지쳐서 위로가 되는 고전 소설이 필요해..."></textarea>
+    
     <div class="chips">
-      <button class="chip" onclick="go('번아웃이 왔어')">번아웃이 왔어</button>
-      <button class="chip" onclick="go('투자 입문하고 싶어')">투자 입문하고 싶어</button>
-      <button class="chip" onclick="go('관계가 힘들어')">관계가 힘들어</button>
-      <button class="chip" onclick="go('그냥 재미있는 소설')">그냥 재미있는 소설</button>
-      <button class="chip" onclick="go('집중력을 높이고 싶어')">집중력을 높이고 싶어</button>
+      <button class="chip" onclick="go('밑바닥까지 우울한 소설')">밑바닥까지 우울한 소설</button>
+      <button class="chip" onclick="go('문장이 압도적으로 아름다운 책')">문장이 압도적으로 아름다운 책</button>
+      <button class="chip" onclick="go('여름밤에 어울리는 단편')">여름밤에 어울리는 단편</button>
     </div>
-    <button class="btn" id="main-btn" onclick="go(null)">추천받기</button>
+    
+    <button class="btn" id="main-btn" onclick="go(null)">책 처방받기</button>
+    <div class="publisher-logo">나만의 출판사</div>
   </div>
 
   <div id="loading-section">
     <div class="spinner-wrap">
       <div class="spinner"></div>
-      <p class="spinner-label">딱 맞는 책을 찾고 있어요...</p>
+      <p class="spinner-label">서재를 뒤지는 중...</p>
     </div>
   </div>
 
   <div id="result-section">
     <div class="result-header">
       <span class="result-query" id="rq"></span>
-      <button class="reset-btn" onclick="goBack()">다시 검색</button>
+      <button class="reset-btn" onclick="goBack()">표지로 돌아가기</button>
     </div>
     <div class="cards" id="cards"></div>
   </div>
 </div>
 
 <script>
+// n8n 웹훅 URL
 var WEBHOOK_URL = "https://serenaryu89.app.n8n.cloud/webhook/4960dd64-2eaf-444d-9920-0194eb7f3e2a";
+// 발급받으신 알라딘 TTB 키
+var ALADIN_TTB_KEY = "ttb-koeun-mail0329001";
 
-var PALETTES = [
-  { bg: "#B8C9D9", text: "#1a2a3a" },
-  { bg: "#E8C9A0", text: "#2a1a0a" },
-  { bg: "#C4D4C0", text: "#1a2a18" }
-];
 var STORES = [
   { name: "알라딘", base: "https://www.aladin.co.kr/search/wsearchresult.aspx?SearchWord=", suffix: "&SearchTarget=Book" },
   { name: "YES24", base: "https://www.yes24.com/Product/Search?domain=ALL&query=", suffix: "" },
@@ -83,8 +193,8 @@ var STORES = [
 ];
 
 function show(id) {
-  document.getElementById("input-section").style.display = id === "input" ? "block" : "none";
-  document.getElementById("loading-section").style.display = id === "loading" ? "block" : "none";
+  document.getElementById("input-section").style.display = id === "input" ? "flex" : "none";
+  document.getElementById("loading-section").style.display = id === "loading" ? "flex" : "none";
   document.getElementById("result-section").style.display = id === "result" ? "block" : "none";
 }
 
@@ -98,9 +208,8 @@ function go(chip) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query: q })
   }).then(function(r) {
-    return r.text(); // JSON 대신 텍스트로 안전하게 받기
+    return r.text(); 
   }).then(function(data) {
-    // 마크다운(```json) 깔끔하게 제거
     var raw = data.replace(/```json/gi, "").replace(/```/g, "").trim();
     var parsed = JSON.parse(raw);
 
@@ -108,33 +217,56 @@ function go(chip) {
     var el = document.getElementById("cards");
     el.innerHTML = "";
 
-    for (var j = 0; j < parsed.books.length; j++) {
-      var b = parsed.books[j];
-      var p = PALETTES[j % PALETTES.length];
+    // 클로저 문제를 피하기 위해 forEach 사용
+    parsed.books.forEach(function(b, j) {
       var links = "";
       for (var k = 0; k < STORES.length; k++) {
         var s = STORES[k];
-        links += "<a class='store-link' href='" + s.base + encodeURIComponent(b.title) + s.suffix + "' target='_blank' style='border:1px solid " + p.text + "40;color:" + p.text + ";'>" + s.name + "</a>";
+        links += "<a class='store-link' href='" + s.base + encodeURIComponent(b.title) + s.suffix + "' target='_blank'>" + s.name + "</a>";
       }
       
       var card = document.createElement("div");
       card.className = "card";
-      card.style.background = p.bg;
       
-      // 출판사와 출판연도 조립
       var publisherText = b.publisher ? " · " + b.publisher : "";
       var yearText = b.year ? " (" + b.year + ")" : "";
       
-      // 카드 안에 들어갈 내용 HTML로 묶기
+      // 고유한 이미지 ID 부여 (cover-0, cover-1 등)
+      var imgId = "cover-" + j;
+      
       card.innerHTML =
-        "<p class='card-genre' style='color:" + p.text + ";'>" + (b.genre || "").toUpperCase() + "</p>" +
-        "<h2 class='card-title' style='color:" + p.text + ";'>" + b.title + "</h2>" +
-        "<p class='card-author' style='color:" + p.text + ";'>" + b.author + publisherText + yearText + "</p>" +
-        "<p class='card-reason' style='color:" + p.text + ";'>" + b.reason + "</p>" +
+        "<p class='card-genre'>" + (b.genre || "").toUpperCase() + "</p>" +
+        "<h2 class='card-title'>" + b.title + "</h2>" +
+        "<p class='card-author'>" + b.author + publisherText + yearText + "</p>" +
+        "<div class='cover-wrap'><img id='" + imgId + "' class='book-cover' src='' alt='" + b.title + " 표지'></div>" +
+        "<p class='card-reason'>" + b.reason + "</p>" +
         "<div class='store-links'>" + links + "</div>";
         
       el.appendChild(card);
-    }
+
+      // ★ 알라딘 API로 표지 가져오기 (CORS 우회를 위해 allorigins 프록시 사용)
+      var aladinApiUrl = "http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey=" + ALADIN_TTB_KEY + "&Query=" + encodeURIComponent(b.title) + "&QueryType=Title&MaxResults=1&start=1&SearchTarget=Book&output=js&Version=20131101";
+      var proxyUrl = "https://api.allorigins.win/get?url=" + encodeURIComponent(aladinApiUrl);
+
+      fetch(proxyUrl)
+        .then(function(res) { return res.json(); })
+        .then(function(proxyData) {
+          var aladinData = JSON.parse(proxyData.contents);
+          if (aladinData.item && aladinData.item.length > 0) {
+            var coverImgUrl = aladinData.item[0].cover;
+            var imgElement = document.getElementById(imgId);
+            if (imgElement && coverImgUrl) {
+              // 화질을 조금 더 좋게 하기 위한 트릭 (coversum -> cover200)
+              imgElement.src = coverImgUrl.replace('coversum', 'cover200');
+              imgElement.style.display = "inline-block";
+            }
+          }
+        })
+        .catch(function(err) {
+          console.log("표지 로드 실패:", err); // 표지를 못 찾아도 텍스트는 정상적으로 뜨게 처리
+        });
+    });
+    
     show("result");
   }).catch(function(e) {
     show("input");
