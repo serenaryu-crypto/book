@@ -97,10 +97,10 @@ function go(chip) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query: q })
   }).then(function(r) {
-    return r.json();
+    return r.text(); // JSON 대신 텍스트로 안전하게 받기
   }).then(function(data) {
-    var raw = typeof data === "string" ? data : JSON.stringify(data);
-    raw = raw.replace(/```json/g, "").replace(/```/g, "").trim();
+    // 마크다운(```json) 깔끔하게 제거
+    var raw = data.replace(/```json/gi, "").replace(/```/g, "").trim();
     var parsed = JSON.parse(raw);
 
     document.getElementById("rq").textContent = "\u201c" + q + "\u201d";
@@ -115,15 +115,23 @@ function go(chip) {
         var s = STORES[k];
         links += "<a class='store-link' href='" + s.base + encodeURIComponent(b.title) + s.suffix + "' target='_blank' style='border:1px solid " + p.text + "40;color:" + p.text + ";'>" + s.name + "</a>";
       }
+      
       var card = document.createElement("div");
       card.className = "card";
       card.style.background = p.bg;
+      
+      // 출판사와 출판연도 조립
+      var publisherText = b.publisher ? " · " + b.publisher : "";
+      var yearText = b.year ? " (" + b.year + ")" : "";
+      
+      // 카드 안에 들어갈 내용 HTML로 묶기
       card.innerHTML =
         "<p class='card-genre' style='color:" + p.text + ";'>" + (b.genre || "").toUpperCase() + "</p>" +
         "<h2 class='card-title' style='color:" + p.text + ";'>" + b.title + "</h2>" +
-        "<p class='card-author' style='color:" + p.text + ";'>" + b.author + " · " + b.publisher + " (" + b.year + ")</p>" +
+        "<p class='card-author' style='color:" + p.text + ";'>" + b.author + publisherText + yearText + "</p>" +
         "<p class='card-reason' style='color:" + p.text + ";'>" + b.reason + "</p>" +
         "<div class='store-links'>" + links + "</div>";
+        
       el.appendChild(card);
     }
     show("result");
