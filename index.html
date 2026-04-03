@@ -412,7 +412,7 @@ function renderChips() {
   var area = document.getElementById('chip-area');
   if (!area) return;
   area.innerHTML = selected.map(function(c) {
-    return '<button class="chip" onclick="go(' + JSON.stringify(c.q) + ')">' + c.label + '</button>';
+    return '<button class="chip" onclick="go(\'' + c.q.replace(/\\/g,'\\\\').replace(/'/g,"\\'") + '\')">' + c.label + '</button>';
   }).join('');
 }
 
